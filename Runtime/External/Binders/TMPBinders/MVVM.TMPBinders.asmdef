@@ -1,0 +1,35 @@
+{
+    "name": "MVVM.TMPBinders",
+    "rootNamespace": "MVVM",
+    "references": [
+        "R3.Unity",
+        "Unity.TextMeshPro",
+        "MVVM",
+        "MVVM.Binders"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.cysharp.r3",
+            "expression": "",
+            "define": "R3_ENABLED"
+        },
+        {
+            "name": "com.unity.ugui",
+            "expression": "2.0.0",
+            "define": "TMP_SUPPORT"
+        },
+        {
+            "name": "com.unity.textmeshpro",
+            "expression": "",
+            "define": "TMP_SUPPORT"
+        }
+    ],
+    "noEngineReferences": false
+}

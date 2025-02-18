@@ -1,0 +1,25 @@
+{
+    "name": "MVVM.Zenject",
+    "rootNamespace": "MVVM",
+    "references": [
+        "MVVM",
+        "Zenject"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Zenject-usage.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.svermeulen.extenject",
+            "expression": "",
+            "define": "EXTENJECT_SUPPORT"
+        }
+    ],
+    "noEngineReferences": false
+}

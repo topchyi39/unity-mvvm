@@ -1,0 +1,15 @@
+{
+  "name": "com.topchyi39.mvvm",
+  "version": "1.0.0-exp.1",
+  "displayName": "MVVM",
+  "description": "MVVM binding.",
+  "unity": "2022.1",
+  "unityRelease": "0b5",
+  "documentationUrl": "https://github.com/topchyi39/mvvm/blob/master/README.MD",
+  "author": {
+    "name": "topchyi39",
+    "email": "topchyi39@gmail.com",
+    "url": "https://github.com/topchyi39"
+  }
+}
+
