@@ -80,7 +80,41 @@ public override void InstallBindings()
 }
 ```
 
-###
+### Reactive Collections
+
+You can use `Observable Collection<>` to bind with `ObservableCollectionView<>`.
+You need create additional `view model` and `view` **children** classes. There's an example of what it should look like.
+```csharp
+public class ChildViewModel
+{
+        
+}
+    
+public class ViewModel
+{
+    [Bind("collection")] private ObservableList<ChildViewModel> _data;
+}
+```
+```csharp
+public class ChildView : View<ChildViewModel>
+{
+        
+}
+    
+public class View : View<ViewModel>
+{
+    [Bind("collection")] [SerializeField] private ObservableListView<ChildView> data;
+}
+```
+`ObservableListView<T>` has two assignable properties:
+- Prefab : T
+- Container : Transform
+
+**Prefab** is used for create instance into **Container**, when an add event is invoked from `ObservableList` in `ViewModel`.
+
+![img](https://github.com/topchyi39/mvvm-resources/blob/main/view-observablelist.png)
+
+Now, you need to create prefab of your `ChildView` and assign it to `ObservableListView`.
 
 ### Concrete Binders for View Model and View
 You can create concrete binders for all your types. To do this, create a class that inherits from `Binder`. This is a generic type that takes the model and view types and passes them into its constructor.
@@ -192,16 +226,17 @@ binder.Unbind();
 
 ### Available Binders
 
-| Binder Name                   |  ViewType  |        ViewModel        |
-|-------------------------------|:----------:|:-----------------------:|
-| ButtonMethodBinder            |   Button   |         Method          |
-| ButtonObservableBinder        |   Button   |     Subject\<Unit>      |
-| EmptyMethodObservableBinder   |   Method   |     Observable\<T>      |
-| GenericMethodObservableBinder | Method\<T> |     Observable\<T>      |
-| ToggleMethodBinder            |   Toggle   |      Method\<bool>      |
-| ToggleBinder                  |   Toggle   | ReactiveProperty\<bool> |
-| TMPTextBinder                 |  TMP_Text  |     Observable\<T>      |
-| TMPInputBinder                | TMP_Input  |    ISubject\<string>    |
+| Binder Name                   |      ViewType       |        ViewModel        |
+|-------------------------------|:-------------------:|:-----------------------:|
+| ButtonMethodBinder            |       Button        |         Method          |
+| ButtonObservableBinder        |       Button        |     Subject\<Unit>      |
+| EmptyMethodObservableBinder   |       Method        |     Observable\<T>      |
+| GenericMethodObservableBinder |     Method\<T>      |     Observable\<T>      |
+| ToggleMethodBinder            |       Toggle        |      Method\<bool>      |
+| ToggleBinder                  |       Toggle        | ReactiveProperty\<bool> |
+| TMPTextBinder                 |      TMP_Text       |     Observable\<T>      |
+| TMPInputBinder                |      TMP_Input      |    ISubject\<string>    |
+| ObservableListBinder          | ObservableListView  |     ObservableList      |
 
 
 ## How to Install
@@ -211,7 +246,8 @@ binder.Unbind();
 1. Install **`R3`** from NuGet using [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity).
     - Open window from `NuGet > Manage NuGet Packages`.
     - Search **`R3`** and press "Install".
-2. Install **`R3.Unity`** from [Git](https://github.com/Cysharp/R3#unity);
+2. Install **`ObservableCollections`** and **`ObservableCollections.R3`** from NuGet, like as previous.
+3. Install **`R3.Unity`** from [Git](https://github.com/Cysharp/R3#unity);
 
 ### Install via Package Manager
 - Click `Window > Package Manager`.
