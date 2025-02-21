@@ -3,12 +3,11 @@
 using UnityEngine;
 using ObservableCollections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using R3;
 
 namespace MVVM
 {
-    public class ObservableListBinder<TV, TM> : Binder<ObservableListView<TV>, ObservableList<TM>> where TV : MonoBehaviour, IView
+    public class ObservableListBinder<TV, TM> : Binder<ListView<TV>, ObservableList<TM>> where TV : View
     {
         private ISynchronizedView<TM, TV> _synchronizedView;
 
@@ -17,17 +16,25 @@ namespace MVVM
         
         private bool _enabled;
         
-        public ObservableListBinder(ObservableListView<TV> view, ObservableList<TM> model) : base(view, model)
+        public ObservableListBinder(ListView<TV> view, ObservableList<TM> model) : base(view, model)
         {
         }
 
         public override void Bind()
         {
+            View.Initialize();
             _synchronizedView = Model.CreateView(Create);
             
             _synchronizedView.ObserveAdd().Subscribe(Add);
             _synchronizedView.ObserveRemove().Subscribe(Remove);
             _synchronizedView.ObserveClear().Subscribe(Clear);
+            _synchronizedView.ObserveMove().Subscribe(Move);
+            _synchronizedView.ObserveReplace().Subscribe(Replace);
+
+            foreach (var view in _synchronizedView)
+            {
+                BindView(view);
+            }
         }
 
         public override void Unbind()
@@ -55,10 +62,7 @@ namespace MVVM
 
         private void Add(CollectionAddEvent<(TM,TV)> addEvent)
         {
-            var view = addEvent.Value.Item2;
-            _binderMap[view].Bind();
-            
-            View.Add(view);
+            BindView(addEvent.Value.Item2);
         }
 
         private void Remove(CollectionRemoveEvent<(TM, TV)> removeEvent)
@@ -66,6 +70,11 @@ namespace MVVM
             var view = removeEvent.Value.Item2;
             if (!view) return;
             
+            RemoveView(view);
+        }
+
+        private void RemoveView(TV view)
+        {
             _binderMap[view].Unbind();
             
             _modelMap.Remove(view);
@@ -73,11 +82,29 @@ namespace MVVM
             View.Remove(view);
         }
 
+        private void Move(CollectionMoveEvent<(TM, TV)> moveEvent)
+        {
+            View.Move(moveEvent.Value.Item2, moveEvent.NewIndex);
+        }
+
+        private void Replace(CollectionReplaceEvent<(TM, TV)> replaceEvent)
+        {
+            RemoveView(replaceEvent.OldValue.Item2);
+            BindView(replaceEvent.NewValue.Item2, replaceEvent.Index);
+        }
+
         private void Clear(Unit unit)
         {
             _modelMap.Clear();
             _binderMap.Clear();
             View.Clear(); 
+        }
+        
+
+        private void BindView(TV view, int? index = null)
+        {
+            _binderMap[view].Bind();
+            View.Add(view, index);
         }
     }
 }

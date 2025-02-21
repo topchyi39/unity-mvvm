@@ -7,24 +7,29 @@ using Object = UnityEngine.Object;
 namespace MVVM
 {
     [Serializable]
-    public class ObservableListView<T> : IEnumerable<T> where T : MonoBehaviour, IView
+    public class ListView<T> : IEnumerable<T> where T : View
     {
         public T this[int i] => _items[i];
+        public int Count => _items.Count;
         
         [SerializeField] private T prefab;
-        [SerializeField] private Transform container;
-
+        [SerializeField] protected Transform container;
+        
         private List<T> _items = new ();
 
-
+        public virtual void Initialize() { }
+        
         public virtual T Create()
         {
             return Object.Instantiate(prefab, container);
         }
 
-        public virtual void Add(T item)
+        public virtual void Add(T item, int? index = null)
         {
             _items.Add(item);
+
+            index = index ?? _items.Count - 1;
+            item.transform.SetSiblingIndex(index.Value);
         }
 
         public virtual void Remove(T item)
@@ -51,6 +56,12 @@ namespace MVVM
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _items.GetEnumerator();
+        }
+
+
+        public void Move(T view, int index) 
+        {
+            view.transform.SetSiblingIndex(index);
         }
     }
 }
