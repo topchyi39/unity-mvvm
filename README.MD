@@ -253,12 +253,12 @@ binder.Unbind();
 - Click `Window > Package Manager`.
 - Click `+ > Add package from git URL` and input the repository URL:
 ````
-https://github.com/topchyi39/mvvm.git?path=src
+https://github.com/topchyi39/mvvm.git
 ````
 
 ### Manually Install
 
 - Open the `Packages/manifest.json` file in your project. Then add this package somewhere in the dependencies block:
 ````
-"com.topchyi39.mvvm": "https://github.com/topchyi39/mvvm.git?path=src"
+"com.topchyi39.mvvm": "https://github.com/topchyi39/mvvm.git"
 ````
