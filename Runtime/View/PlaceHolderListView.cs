@@ -12,13 +12,17 @@ namespace MVVM
         [SerializeField] private int placeholdersAmount;
 
         private List<T> _placeholders;
+
+        public event Action<T, int> PlaceholderCreated;
         
         public override void Initialize()
         {
             _placeholders = new List<T>(placeholdersAmount);
             for (var i = 0; i < placeholdersAmount; i++)
             {
-                _placeholders.Add(Object.Instantiate(placeholderPrefab, container));
+                var instance = Object.Instantiate(placeholderPrefab, container);
+                _placeholders.Add(instance);
+                PlaceholderCreated?.Invoke(instance, i);
             }
         }
 
@@ -27,7 +31,7 @@ namespace MVVM
             base.Add(item, index);
             
             if (Count <= placeholdersAmount)
-                _placeholders[^Count].gameObject.SetActive(false);
+                _placeholders[Count - 1].gameObject.SetActive(false);
         }
 
         public override void Remove(T item)
@@ -35,7 +39,7 @@ namespace MVVM
             base.Remove(item);
             
             if (Count < placeholdersAmount)
-                _placeholders[^(Count + 1)].gameObject.SetActive(true);
+                _placeholders[^Count].gameObject.SetActive(true);
 
         }
     }
